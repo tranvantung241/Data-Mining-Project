@@ -16,11 +16,11 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/")
 def index():
-    return render_template("home.html")
+    return render_template("home_copy.html")
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    return render_template("home_copy.html")
 
 @app.route("/upload_file")
 def upload_file():
@@ -40,7 +40,8 @@ def upload():
         filename = upload.filename
         # This is to verify files are supported
         ext = os.path.splitext(filename)[1]
-        if (ext == ".jpg") or (ext == ".png") or (ext == ".csv"):
+        if ext in [".jpg", ".png", ".csv"]: 
+        # if (ext == ".jpg") or (ext == ".png") or (ext == ".csv"):
             print("File supported moving on...")
         else:
             render_template("Error.html", message="Files uploaded are not supported...")
