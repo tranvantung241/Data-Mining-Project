@@ -1,11 +1,12 @@
 import os
-from django.shortcuts import redirect
+# from django.shortcuts import redirect
 from flask import Flask, request, render_template, send_from_directory, flash, url_for
 from werkzeug.utils import secure_filename
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import sys  
+import sys   
+from flask import render_template_string
  
 
 
@@ -16,11 +17,15 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/")
 def index():
-    return render_template("home_copy.html")
+    return render_template("home.html")
 
 @app.route("/home")
 def home():
-    return render_template("home_copy.html")
+    return render_template("home.html")
+
+@app.route("/describle")
+def describle():
+    return render_template("describle.html")
 
 @app.route("/upload_file")
 def upload_file():
@@ -56,7 +61,17 @@ def upload():
 @app.route('/show')
 def show():
     data = pd.read_csv("./images/2015.csv", encoding ='latin1')
-    return data.to_html(border=3)
+    return data.to_html(border=1)
+
+@app.route('/show2')
+def show2():
+    data = pd.read_csv("./images/2015.csv", encoding ='latin1')  
+    value = render_template_string(data.to_html(border=1), context );
+    return render_template("chart.html", value = value)
+
+@app.route('/chart')
+def chart():
+    return render_template("chart.html")
 
 
 if __name__ == "__main__":

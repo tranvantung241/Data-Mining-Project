@@ -2,15 +2,14 @@
 <html lang="en">
 
   <head>
-
+    {% block head %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>Tung</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <!-- Bootstrap core CSS-->
     <link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
@@ -23,88 +22,137 @@
     <!-- Custom styles for this template--> 
     <link href="{{url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
 
+   
+
+    <title>{% block title %}{% endblock %}  - Data Mining </title> 
+
+     {% endblock %}
   </head>
 
-  <body id="page-top">
+  <body id="page-top" >
 
-    <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+    <!-- <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
       <a class="navbar-brand mr-1" href="">Data Mining</a>
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
       </button>
-    </nav>
+    </nav> -->
 
     <div id="wrapper">
 
-      <!-- Sidebar -->
-      <ul class="sidebar navbar-nav">
+      <!-- Sidebar --> 
+      <ul class="sidebar navbar-nav " > 
+        <button  class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#" >
+            <i class="fas fa-bars"></i> 
+             </button>
         <li class="nav-item active">
           <a class="nav-link" href="{{ url_for('home')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Data Mining</span>
+            <span>Data Mining</span> 
           </a>
-        </li>
-        <li class="nav-item dropdown">
-           <!-- data-toggle="dropdown" role="button" -->
+        </li> 
+
+        <li class="nav-item "> 
           <a class="nav-link" href="{{ url_for('upload_file')}}">
             <i class="fas fa-fw fa-folder"></i>
             <span>Upload File</span>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <h6 class="dropdown-header">Login Screens:</h6>
-            <a class="dropdown-item" href="">Login</a>
-            <a class="dropdown-item" href="">Register</a>
-            <a class="dropdown-item" href="">Forgot Password</a>
-            <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Other Pages:</h6>
-            <a class="dropdown-item" href="">404 Page</a>
-            <a class="dropdown-item" href="">Blank Page</a>
-          </div>
+          </a> 
         </li>
+
+        <li class="nav-item "> 
+          <a class="nav-link" href="{{ url_for('describle')}}">
+            <i class="fas fa-fw fa-info-circle"></i> 
+            <span>Describle</span>
+          </a> 
+        </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="">
+          <a class="nav-link" href="{{ url_for('chart')}}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Charts</span></a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="tables.html">
+          <a class="nav-link" href="{{ url_for('show')}}">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span></a>
         </li>
-      </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i   ></i>
+            <span></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i  ></i>
+            <span> </span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i  ></i>
+            <span> </span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i  ></i>
+            <span> </span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i ></i>
+            <span> </span></a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i ></i>
+            <span> </span></a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i ></i>
+            <span> </span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i ></i>
+            <span> </span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i ></i>
+            <span> </span></a>
+        </li> 
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i ></i>
+            <span> </span></a>
+        </li> 
+
+          >
+      </ul> 
 
       <!-- content-wrapper -->
       <div id="content-wrapper">
-
+  
         <div class="container-fluid">
-
-            <h1>ĐỒ ÁN KHAI THÁC DỮ LIỆU</h1>
-
+              {% block content  %}
+              {% endblock %}
         </div>
         <!-- /.container-fluid -->
 
-        <!-- Sticky Footer -->
-        <footer class="sticky-footer">
+        <!-- Sticky Footer --> 
+        <footer class="sticky-footer" style="height: 50px; background-color: #018c3f ">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright © HELEN</span>
+               <span  style=" font-weight: bold;  color: white; font-size: 15px">Copyright © HELEN</span>
             </div>
           </div>
-        </footer>
+        </footer> 
+      </div> 
 
-      </div>
-      <!-- /.content-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fas fa-angle-up"></i>
-    </a>
- 
-
-    <!-- Bootstrap core JavaScript-->
+    </div> 
+ <!-- Bootstrap core JavaScript-->
     <script src="{{url_for('static',filename = 'vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{url_for('static',filename = 'vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
@@ -147,8 +195,16 @@
 
     } );
 
-</script>
+    </script>
 
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
+    <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+        $("#files").shieldUpload();
+    });
+</script>
   </body>
 
 </html>
