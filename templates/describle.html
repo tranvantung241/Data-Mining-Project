@@ -5,5 +5,128 @@
 {% endblock %}
  
 {% block content  %}
+<style type="text/css">
+	
+	table, th, td {
+   border: 1px solid black;
+
+   .cot1{
+   	width: 20%;
+   }
+
+   th, td {
+   	padding-left: 10%;
+   }
+}
+</style>
 <h1 style="text-align: center">MÔ TẢ DỮ LIỆU</h1>
+<li>Nguồn dữ liệu: </li>
+<ul><a href="https://datamillnorth.org/dataset/road-traffic-accidents" target="_blank"> https://datamillnorth.org/dataset/road-traffic-accidents</a></ul>
+<li>Mô tả dữ liệu:</li>
+<ul>Thông tin về tai nạn trên khắp Leeds. Dữ liệu bao gồm vị trí, số người và số phương tiện liên quan, bề mặt đường, điều kiện thời tiết, mức độ nghiệm trọng, thương vong.</ul>
+<ul>Mỗi dòng dữ liệu và một vụ tai nạn với các dữ liệu thuộc tính kèm theo.</ul>
+
+<li>Mô tả thuộc tính:</li>
+<ul>
+	<table style="width: 70%">
+	  <tr>
+	    <th class="cot1">Thuộc Tính</th>
+	    <th>Mô Tả</th>  
+	  </tr>
+	  <tr>
+	    <td>Reference Number</td>
+	    <td>Mã số của vụ tai nạn</td> 
+	  </tr>
+	  <tr>
+	    <td>Grid Ref: Easting</td>
+	    <td>Jackson</td> 
+	  </tr>
+	  <tr>
+	    <td>Grid Ref: Northing</td>
+	    <td>Doe</td>
+	  </tr>
+	  <tr>
+	    <td>Number of Vehicles</td>
+	    <td>Số lượng phương tiện giao thông trong vụ tai nạn</td>
+	  </tr>
+	  <tr>
+	    <td>Accident Date</td>
+	    <td>Ngày xảy ra tai nạn</td>
+	  </tr>
+	  <tr>
+	    <td>Time (24hr)</td>
+	    <td>Thời gian (24hr)</td>
+	  </tr>
+	  <tr>
+	    <td>1st Road Class</td>
+	    <td>Loại đường:  <ul>A(M)</ul><ul>A</ul><ul>B</ul> <ul>C</ul> <ul>Unclassified</ul></td>
+	  </tr>
+	  <tr>
+	    <td>Road Surface</td>
+	    <td>Bề mặt đường: 
+	    	<ul>Dry</ul>
+	    	<ul>Flood</ul>
+	    	<ul>Frost / Ice</ul>
+	    	<ul>Snow</ul>
+	    	<ul>Wet / Damp</ul>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Lighting Conditions</td>
+	    <td>Điều kiện ánh sáng:  
+	    	<ul>Darkness: no street lighting</ul>
+	    	<ul>Darkness: street lighting unknown</ul>
+	    	<ul>Darkness: street lights present and lit</ul>
+	    	<ul>Daylight: street lights present</ul>
+	   	</td>
+	  </tr>
+	  <tr>
+	    <td>Weather Conditions</td>
+	    <td>Điều kiện thời tiết: 
+	     	<ul>Fine without high winds</ul>
+	    	<ul>Raining without high winds</ul>
+	    	<ul>Snowing without high winds</ul>
+	    	<ul>Fine with high winds</ul>
+	    	<ul>Raining with high winds</ul>
+	    	<ul>Snowing with high winds</ul>
+	    	<ul>Fog or mist – if hazard</ul>
+	    	<ul>Other</ul>
+	    	<ul>Unknown</ul>
+	  </tr>
+	  <tr>
+	    <td>Casualty Class</td>
+	    <td>Đối tượng thương vong: 
+	    	<ul>Driver or rider</ul>
+	    	<ul>Vehicle or pillion passenger</ul>
+	    	<ul>Pedestrian</ul></td>
+	  </tr>
+	  <tr>
+	    <td>Casualty Severity</td>
+	    <td>Mức độ thương vong:
+	    	<ul>Slight</ul>
+	    	<ul>Serious</ul>
+	    	<ul>Fatal</ul>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Sex of Casualty</td>
+	    <td>Giới tính của nạn nhân:
+	    	<ul>Male</ul>
+	    	<ul>Female</ul>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Age of Casualty</td>
+	    <td>Độ tuổi của nạn nhân</td>
+	  </tr>
+	  <tr>
+	    <td>Type of Vehicle</td>
+	    <td>Loại phương tiện</td>
+	  </tr>
+
+
+
+	</table>
+</ul>
+
 {% endblock %}

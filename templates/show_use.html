@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Upload File{% endblock %}
+{% block head %}
+  {{ super() }} 
+{% endblock %}
+ 
+{% block content  %} 
+<div style="overflow: auto;
+    white-space: nowrap;"> 
+     {{df_view.to_html(border=1, na_rep="-") | safe}}
+</div> 
+{% endblock %}
