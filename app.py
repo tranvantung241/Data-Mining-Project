@@ -7,23 +7,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys   
 from flask import render_template_string 
-from wtforms import Form, TextField
+from wtforms import Form, TextField 
+import datetime
 
 __author__ = 'TranTung'
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-
-# class Form(FlaskForm):
-#      column_name = SelectField('column_name', choices[('1','2','3')])
-
-
+ 
 
 # =========================================FUNCTION===========================================================
 # read data
 def read_data():
     data = pd.read_csv("./dataset/2017.csv", encoding ='latin1')  
     return data
+
+# renew data
+def renew_data(data_handed):
+    return data_handed
+
 
 # get data  use]
 def get_data_use():
@@ -47,6 +48,14 @@ def getShape():
 def dic_column_missing():
     dic_column_missing = {}
     return dic_column_missing
+
+# =========================================DECLARE===========================================================
+aler = "Removed data."
+aler2 = "Kích thước sau khi remove data:"
+list_column_name = list_columns_name()
+data_use = get_data_use() 
+dic_column_noise = {}
+shape = getShape();
 
 # =========================================ROUTE===========================================================
 #route home -----------------------------------------------------------------------------------------------
@@ -116,24 +125,115 @@ def chart():
 @app.route('/preprocess')
 def preprocess():  
     return render_template("pre_process.html", list_column_name = list_columns_name(),
-                             dic_column_missing= dic_column_missing(),
-                             len=len(list_columns_name()), shape= getShape())
+                             dic_column_missing = dic_column_missing(), 
+                             len=len(list_columns_name()), shape= getShape(), dic_column_noise =dic_column_noise)
 
 
 #route check_missing -----------------------------------------------------------------------------------------------
 @app.route('/check_missing', methods=['POST'] )
-def check_missing(): 
-    data_use = get_data_use()
-    list_column_name = list_columns_name()
+def check_missing():  
+    global data_use
     dic_column_missing = {}
     sum_missing = []
     # nhận dữ liệu từ form submit
     if request.method == 'POST':
-        for i in range(1, len(list_column_name)):
+        for i in range(0, len(list_column_name)):
             sum = data_use[list_column_name[i]].isnull().sum()
             dic_column_missing[list_column_name[i]] = sum
-    return render_template('pre_process.html', dic_column_missing = dic_column_missing, 
-        list_column_name = list_columns_name())
+    return render_template('pre_process.html',
+                            dic_column_noise = dic_column_noise,
+                            dic_column_missing = dic_column_missing, 
+                            list_column_name = list_columns_name(),
+                            shape= getShape())
+
+#route Remove missing -----------------------------------------------------------------------------------------------
+@app.route('/remove_missing', methods=['POST'] )
+def remove_missing():  
+    global data_use
+    global shape
+    dic_column_missing = {}
+    sum_missing = []
+    # nhận dữ liệu từ form submit
+    if request.method == 'POST':
+         data_use = data_use.dropna()  
+         shape = data_use.shape
+    return render_template('pre_process.html',
+                            dic_column_noise = dic_column_noise,
+                            dic_column_missing = dic_column_missing, 
+                            list_column_name = list_columns_name(),
+                            shape= shape,  
+                            aler =aler,
+                            aler2 = aler2)
+
+#route check_Noise -----------------------------------------------------------------------------------------------
+@app.route('/check_noise', methods=['POST'] )
+def check_noise():    
+    global shape
+    number  = data_use['1st Road Class & No'].value_counts()
+    index_number =  number.keys()
+    dic_column_noise = {}
+
+    if request.method == 'POST':
+        for i in range(0, len(number)): 
+            dic_column_noise[index_number[i]] = number[i]
+
+    # # vẽ hiểu đồ
+    # import matplotlib.pyplot as plt
+    # import plotly.plotly as py
+    # import plotly.tools as tls
+    # plt.rcParams['figure.figsize'] = (40, 24)
+    # plt.bar(index_number,number, align='center', alpha=0.5)
+    # plt.savefig('./static/image/noise.jpg')
+
+
+    return render_template('pre_process.html',  
+                            dic_column_noise = dic_column_noise,
+                            list_column_name = list_columns_name(),
+                            dic_column_missing = dic_column_missing(),
+                            shape= shape
+                            )
+#route remove_Noise -----------------------------------------------------------------------------------------------
+@app.route('/remove_noise', methods=['POST'] )
+def remove_noise():
+    global data_use;
+    global shape;
+
+    # xóa cột  1st Road Class & No
+    remove_list = []
+    number  = data_use['1st Road Class & No'].value_counts()
+    index_number =  number.keys()
+    for i in range(0, len(number)):
+        if (number[i]<20):
+            remove_list.append(index_number[i])
+
+    for i in remove_list:
+        data_use = data_use[data_use['1st Road Class & No'] != i]
+
+
+    # xóa cột Weather Conditions   
+    data_use = data_use[data_use['Weather Conditions'] != 'Other']
+
+
+    shape = data_use.shape
+
+    return render_template('pre_process.html',  
+                            dic_column_noise = dic_column_noise,
+                            list_column_name = list_columns_name(),
+                            dic_column_missing = dic_column_missing(),
+                            shape= shape,  aler2 = aler2, aler= aler)
+
+
+@app.route('/save_file', methods=['POST'] )
+def save_file():
+    time  = datetime.datetime.now()
+    # time_str = str(time)
+    time_str = time.strftime('%d_%m_%Y %H_%M_%S')
+    data_use.to_csv("./dataset/2017_preprocessed "+time_str+".csv",header = True, index= False)
+    return render_template('pre_process.html',  
+                            dic_column_noise = dic_column_noise,
+                            list_column_name = list_columns_name(),
+                            dic_column_missing = dic_column_missing(),
+                            shape= shape,  aler2 = aler2, aler= aler)
 
 if __name__ == "__main__":
     app.run(host='localhost', port=8080, debug=True)

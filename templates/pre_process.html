@@ -2,7 +2,7 @@
 {% block title %}Upload File{% endblock %}
 {% block head %}
   {{ super() }} 
-  <style type="text/css">
+ <style type="text/css">
   	h1{
   		color: red;
   		text-align: center;
@@ -17,12 +17,6 @@
   		border-radius: 25px;
   		color : #ffffff;
   		width: 150px;
-  	}
-
-  	textarea{
-  		position: absolute; 
-  		margin-left: 30px;
-  		heigh: : 10px;
   	}
 
   	.div_checkmissing {
@@ -41,9 +35,11 @@
   		position: absolute; 
   	}
   	.div_tittle{
+  		position: relative; 
   		margin-bottom: 10px;
 
   	}
+
   	h3{ 
   		position: absolute; 
   	}
@@ -56,22 +52,28 @@
   		padding-top: 7px;
   		font-weight: bold; 
  	}
-
- 	table{
+ 	p{
  		margin-left: 50px;
- 		margin-top: 10px;
- 		margin-bottom: 40px; 
  	}
 
  	table, th, td {
     border: 1px solid black;
 	}
- 
+
+	div.div_noiseData{
+		position: relative;  
+	}
+	div.char{ 
+		position: absolute; 
+		left: 200px;
+	}
   </style>
 {% endblock %}
  
-{% block content  %}
 
+
+
+{% block content  %}
 
 <h1 >Pre Processing Data</h1>
 
@@ -92,62 +94,81 @@
 		<div class="div_checkmissing"> 
 			<form action="{{ url_for('check_missing')}}", method="POST">  
 		    	<input type="submit" name="check_missing" value="Ckeck Missing" />
-		    	 <table border = 1>
-		    	 	<tr>
-			               <th>Columns Name</th>
-			               <th>Quanlity of Missing Data</th>
-			            </tr>
-		    		{% for key, value in dic_column_missing.items() %}
-         
-			            <tr>
-			               <td> {{ key }} </td>
-			               <td align="center"> {{ value }} </td>
-			            </tr>
-            
-         			{% endfor %}
- 				</table>
-		    	 
+		    	<p >Kích thước: <span style="font-weight: bold;">{{shape}}<span></p>
+		    
+			    	<table border = 1>
+			    	 	<tr>
+				               <th>Columns Name</th>
+				               <th>Quanlity of Missing Data</th>
+				            </tr>
+			    		{% for key, value in dic_column_missing.items() %}
+	         
+				            <tr>
+				               <td> {{ key }} </td>
+				               <td align="center"> {{ value }} </td>
+				            </tr>
+	            
+	         			{% endfor %}
+	 				</table> 
+ 				
 		    </form>
  
-		    <form method="post"> 
+		    <form  action="{{ url_for('remove_missing')}}", method="POST" > 
 		    	<input type="submit" name="remove_missing" value="Remove Missing" />
-		    	<textarea  rows="1" cols="50"></textarea>
+		    	<p>{{aler}}</p>
+		    	<p>{{aler2}} <span style="font-weight: bold;">{{shape}}</span></p>
+		    	 
+ 				</table>
+		    </form> 
+		</div> 
+ 
+
+ <!-- Noise Data	 -->
+	<li class="li">Noise Data</li> 
+		<div class="div_checkmissing"> 
+			<form action="{{url_for('check_noise')}}", method="POST">  
+		    	<input type="submit" name="check_noise" value="Ckeck Noise" />
+		    	<p >Kích thước: <span style="font-weight: bold;">{{shape}}<span></p>
+		    	<p >Column Name: <span style="font-weight: bold;">{{shape}}<span></p>
+		    	<div class="div_noiseData">
+		    		<!-- <div class="char">
+	 					 <img src= {{url}}  alt="Chart" height="900" width="600">
+ 					</div> -->
+			    	 <table border = 1 class="Noise">
+			    	 	<tr>
+				               <th>Key</th>
+				               <th>Values</th>
+				            </tr> 
+			    		 {% for key, value in dic_column_noise.items() %}
+	         
+				            <tr>
+				               <td> {{ key }} </td>
+				               <td align="center"> {{ value }} </td>
+				            </tr>
+	            
+	         			{% endfor %}
+	 				</table> 
+	 				
+				</div>
+ 				
+		    </form>
+ 
+		    <form  action="{{url_for('remove_noise')}}", method="POST" > 
+		    	<input type="submit" name="remove noise" value="Remove Noise" />
+		    	<p>{{aler}}</p>
+		    	<p>{{aler2}} <span style="font-weight: bold;">{{shape}}</span></p>
+		    	 
+ 				</table>
 		    </form> 
 		</div> 
 
-
-	<!-- Duplicate Data	 -->
-	<li class="li">Duplicate Data</li>
-		<div class="div_duplicate"> 
-			<form method="post"> 
-		    	<br>
-		    	<input type="submit" name="check_duplicate " value="Check Duplicate " />
-		    	<textarea  rows="1" cols="50">Kết Quả:</textarea>
-		    </form>
-
-		    <form method="post"> 
-		    	<input type="submit" name="remove_duplicate" value="Remove Duplicate " />
-		    	<textarea  rows="1" cols="50">Kết Quả:</textarea>
-		    </form> 
-		</div>
-
-
-
-	<!-- Drop NA -->
-	<li class="li">Drop NA</li> 
-		<div class="div_dropna"> 
-			<form method="post"> 
-		    	<br>
-		    	<input type="submit" name="check_na " value="Check NA " />
-		    	<textarea  rows="1" cols="50">Kết Quả:</textarea>
-		    </form>
-
-		    <form method="post"> 
-		    	<input type="submit" name="remove_na" value="Remove NA " />
-		    	<textarea  rows="1" cols="50">Kết Quả:</textarea>
-		    </form> 
-		</div> 
+ 	<li class="li">Save File</li> 
+ 	<div class="div_checkmissing"> 
+			 <p>Lưu file data sau khi tiền xử lý: </p>
+			 <form action="{{url_for('save_file')}}", method="POST"  >
+				<input type="submit" value="Lưu File"
+				 />
+			</form>
+	</div> 
 </ul>
-
-
 {% endblock %}
