@@ -1,0 +1,168 @@
+
+{% extends "layout.html" %}
+{% block title %}Home {% endblock %}
+{% block head %}
+  {{ super() }} 
+
+	<script>
+	function myFunction() { 
+	    document.getElementById("Button").click();
+	}
+
+	</script>
+
+
+  <style type="text/css">
+  	h1{
+  		color: red;
+  		text-align: center;
+  	}
+
+  	.colums_road_class{
+  		position: static;
+  		margin-bottom: 10px;
+  		margin-top: 20px;
+  	}
+
+  	.colums_road_surface{ 
+  		position:initial;
+  	}
+
+  	input{
+  		background-color: #008CBA;
+  		border-radius: 25px;
+  		color : #ffffff;
+  		width: 150px;
+  	}
+
+  	li.li{
+  		 font-weight: bold;
+  		 margin-top: 20px;
+  	} 
+
+	.clicker:focus + .hiddendiv{
+		display:block;
+		}
+
+	.hiddendiv{
+	display:block;
+	}
+
+	form.clicker:focus + .hiddendiv{
+		display:block;
+		}
+
+  </style>
+{% endblock %}
+ 
+{% block content  %}
+<h1 >CONVERTED VALUES</h1> 
+
+
+ <!-- Dữ liệu gốc -->
+<li class="li">Original datase</li>
+<div style="overflow: auto;
+    white-space: nowrap;"> 
+     {{data.to_html(border=1, na_rep="-") | safe}}
+</div> 
+ 
+ 
+
+<!-- Bảng chuyển đổi dữ liệu-->
+<div id="value"  class="hiddendiv">
+		<li class="li">Table of Values Replacement</li> 
+		<!-- dict_Road_Class -->
+		<table border = 1 class="colums_road_class">
+			<tr>
+				<th>Values</th>
+				<th>Replace values</th>
+			</tr>
+			{% for key, value in dict_Road_Class.items() %}
+			         
+			<tr>
+			<td> {{ key }} </td>
+			<td align="center"> {{ value }} </td>
+			</tr>
+			            
+			 {% endfor %}
+		</table> 
+
+		<!-- dict_Road_Surface -->
+		<table border = 1 class="colums_road_surface">
+			<tr>
+				<th>Values</th>
+				<th>Replace values</th>
+			</tr>
+			{% for key, value in dict_Road_Surface.items() %}
+			         
+			<tr>
+			<td> {{ key }} </td>
+			<td align="center"> {{ value }} </td>
+			</tr>
+			            
+			 {% endfor %}
+		</table> 
+
+		<!-- dict_Lighting -->
+		<table border = 1>
+			<tr>
+				<th>Values</th>
+				<th>Replace values</th>
+			</tr>
+			{% for key, value in dict_Lighting.items() %}
+			         
+			<tr>
+			<td> {{ key }} </td>
+			<td align="center"> {{ value }} </td>
+			</tr>
+			            
+			 {% endfor %}
+		</table> 
+
+		<!-- dict_Weather -->
+		<table border = 1>
+			<tr>
+				<th>Values</th>
+				<th>Replace values</th>
+			</tr>
+			{% for key, value in dict_Weather.items() %}
+			         
+			<tr>
+			<td> {{ key }} </td>
+			<td align="center"> {{ value }} </td>
+			</tr>
+			            
+			 {% endfor %}
+		</table> 
+
+		<!-- dict_Vehicle -->
+		<table border = 1>
+			<tr>
+				<th>Values</th>
+				<th>Replace values</th>
+			</tr>
+			{% for key, value in dict_Vehicle.items() %}
+			         
+			<tr>
+			<td> {{ key }} </td>
+			<td align="center"> {{ value }} </td>
+			</tr>
+			            
+			 {% endfor %}
+		</table>  
+</div>
+
+
+<!-- Lưu file -->
+		<li class="li">Save File</li> 
+		 	<div class="div_checkmissing"> 
+					 <p>Lưu file data sau khi tiền xử lý: </p>
+					 <form action="{{url_for('save_file_converted')}}", method="POST"  >
+						<input type="submit" value="Lưu File"
+						 />
+					</form>
+			</div> 
+{{  value }}
+ 
+
+{% endblock %}

@@ -22,21 +22,17 @@
     <!-- Custom styles for this template--> 
     <link href="{{url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
 
-   
+    <!-- icon -->
+   <link rel="shortcut icon"   type="image/png"   href="/static/image/mi.png">
+
+   <!-- <link rel='shortcut icon' type='image/x-icon' href='/static/image/Favicon.ico' /> -->
 
     <title>{% block title %}{% endblock %}  - Data Mining </title> 
 
      {% endblock %}
   </head>
 
-  <body id="page-top" >
-
-    <!-- <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
-      <a class="navbar-brand mr-1" href="">Data Mining</a>
-      <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
-        <i class="fas fa-bars"></i>
-      </button>
-    </nav> -->
+  <body id="page-top" > 
 
     <div id="wrapper">
 
@@ -83,14 +79,14 @@
             <span>Pre Processing</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i  ></i>
-            <span> </span></a>
+          <a class="nav-link" href="{{url_for('convert_values')}}">
+            <i class="fas fa-cogs"></i>
+            <span>Convert Values</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i  ></i>
-            <span> </span></a>
+          <a class="nav-link" href="{{url_for('classify')}}">
+            <i class="fa fa-anchor"></i>
+            <span>Classification</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">

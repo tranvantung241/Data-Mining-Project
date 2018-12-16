@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block title %}Upload File{% endblock %}
+{% block head %}
+  {{ super() }} 
+  <style type="text/css">
+      
+      .clicker {
+        background-color: #008CBA;
+        border-radius: 25px;
+        color : #ffffff;
+        width: 100px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        padding-bottom: 5px;
+    }
+
+    table, th{
+        padding-left: 15px;
+    } 
+
+    li.li{
+        font-weight: bold;
+        padding-bottom: 20px;
+        padding-top: 20px
+    }
+
+    select{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+  </style>
+{% endblock %}
+ 
+{% block content  %}
+<h1 style="text-align: center ">CLASSIFICATION</h1>
+
+<!-- container -->
+<div>
+    <p>Sử dụng thuật toán phân lớp Cây Quyết Định (Decision Tree) </p>
+     <li class="li">Xây dựng mô hình Decision Tree : Entropy</li>  
+    <table style="width:100%">
+      <tr>
+        <th>
+             <!-- dùng thuật toán Entropy -->
+            <h5>Cây Quyết Định Entropy</h2>
+            <form action="{{url_for('entropy')}}", method="POST" class="clicker"  id="nameform"> </form> 
+            <button type="submit" form="nameform" value="Submit" class="clicker">Entropy</button>
+            <p>Độ chính xác : {{accurate_entropy}} </p>
+                <p>Confusion Matrix:  </p>
+            <div style="border: 1px solid black; width: 100px">
+                <p>{{cm_entropy[0]}} <br> {{cm_entropy[1]}} <br> {{cm_entropy[2]}} </p> 
+            </div>
+        </th>
+
+
+        <th>
+             <!-- dùng thuật toán Gini -->
+            <h5>Cây Quyết Định Gini</h2> 
+            <form action="{{url_for('gini')}}", method="POST" class="clicker"  id="giniform"> </form> 
+            <button type="submit" form="giniform" value="Submit" class="clicker">Gini</button>
+            <p>Độ chính xác : {{accurate_gini}}</p>
+                <p>Confusion Matrix:  </p>
+            <div style="border: 1px solid black; width: 100px">
+                <p>{{cm_gini[0]}} <br> {{cm_gini[1]}} <br> {{cm_gini[2]}} </p> 
+            </div>
+
+        </th>  
+      </tr>
+    </table>
+    
+    <!-- Phân lớp -->
+    <li class="li">Phân lớp</li> 
+
+    <form action="/action_page.php">
+        <p>Cột 1:  Cột 2:</p> 
+      <select name="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="fiat">Fiat</option>
+        <option value="audi">Audi</option>
+      </select>
+
+      <select name="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="fiat">Fiat</option>
+        <option value="audi">Audi</option>
+      </select>
+
+
+         <br><br>
+      <input type="submit">
+    </form>
+</div>
+            
+{% endblock %}

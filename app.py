@@ -9,6 +9,7 @@ import sys
 from flask import render_template_string 
 from wtforms import Form, TextField 
 import datetime
+import random
 
 __author__ = 'TranTung'
 app = Flask(__name__)
@@ -49,6 +50,19 @@ def dic_column_missing():
     dic_column_missing = {}
     return dic_column_missing
 
+# creat list values converted
+def list_converted(name_colum): 
+    global data_use
+    dict_converted = {}
+    values = list(set(data_use[name_colum]))
+    value_replace = 1.0
+    for i in range(0, len(values)):
+        dict_converted[values[i]] = value_replace
+        data_use = data_use.replace(values[i], value_replace)
+        value_replace = value_replace +1
+
+    return dict_converted
+
 # =========================================DECLARE===========================================================
 aler = "Removed data."
 aler2 = "Kích thước sau khi remove data:"
@@ -56,6 +70,10 @@ list_column_name = list_columns_name()
 data_use = get_data_use() 
 dic_column_noise = {}
 shape = getShape();
+accurate_entropy=""
+accurate_gini = ""
+cm_entropy = []
+cm_gini = []
 
 # =========================================ROUTE===========================================================
 #route home -----------------------------------------------------------------------------------------------
@@ -225,6 +243,7 @@ def remove_noise():
 
 @app.route('/save_file', methods=['POST'] )
 def save_file():
+    global data_use
     time  = datetime.datetime.now()
     # time_str = str(time)
     time_str = time.strftime('%d_%m_%Y %H_%M_%S')
@@ -234,6 +253,158 @@ def save_file():
                             list_column_name = list_columns_name(),
                             dic_column_missing = dic_column_missing(),
                             shape= shape,  aler2 = aler2, aler= aler)
+
+#route convert values -----------------------------------------------------------------------------------------------
+@app.route('/convert_values' )
+def convert_values():
+    global data_use 
+
+    dict_Road_Class  = {}
+    dict_Road_Surface  = {}
+    dict_Lighting  = {}
+    dict_Weather  = {}
+    dict_Vehicle  ={} 
+
+    return render_template('convert_values.html', 
+                            data =   data_use.head(),
+                            dict_Road_Class = dict_Road_Class,
+                            dict_Road_Surface = dict_Road_Surface, 
+                            dict_Lighting =dict_Lighting,
+                            dict_Weather =dict_Weather ,
+                            dict_Vehicle= dict_Vehicle)
+
+
+ #route converted values -----------------------------------------------------------------------------------------------
+@app.route('/converted_values', methods=['POST'] )
+def converted_values():
+    global data_use
+    
+    dict_Road_Class  = list_converted('1st Road Class & No')
+    dict_Road_Surface  = list_converted('Road Surface')
+    dict_Lighting  = list_converted('Lighting Conditions')
+    dict_Weather  = list_converted('Weather Conditions')
+    dict_Vehicle  = list_converted('Type of Vehicle')
+ 
+
+    return render_template('converted_values.html', 
+                            data =   data_use.head(),
+                            dict_Road_Class = dict_Road_Class,
+                            dict_Road_Surface = dict_Road_Surface, 
+                            dict_Lighting =dict_Lighting,
+                            dict_Weather =dict_Weather ,
+                            dict_Vehicle= dict_Vehicle)
+
+@app.route('/save_file_converted', methods=['POST'] )
+def save_file_converted():
+    global data_use
+    dict_Road_Class  = {}
+    dict_Road_Surface  = {}
+    dict_Lighting  = {}
+    dict_Weather  = {}
+    dict_Vehicle  = {}
+    time  = datetime.datetime.now()
+    # time_str = str(time)
+    time_str = time.strftime('%d_%m_%Y %H_%M_%S')
+    data_use.to_csv("./dataset/2017_preprocessed "+time_str+".csv",header = True, index= False)
+    return render_template('converted_values.html',  
+                            data =   data_use.head(),
+                            dict_Road_Class = dict_Road_Class,
+                            dict_Road_Surface = dict_Road_Surface, 
+                            dict_Lighting =dict_Lighting,
+                            dict_Weather =dict_Weather ,
+                            dict_Vehicle= dict_Vehicle)
+
+ #route classify -----------------------------------------------------------------------------------------------
+@app.route('/classify')
+def classify():  
+    global cm_entropy
+    global cm_gini
+    return render_template("classification.html", cm_entropy = cm_entropy, cm_gini=cm_gini) 
+
+# entropy
+@app.route('/entropy', methods = ['POST'])
+def entropy():
+    global accurate_entropy
+    global cm_entropy
+    global cm_gini
+    dataset_entroy = pd.read_csv("./dataset/2017_preprocessed 13_12_2018 23_11_37.csv", encoding ='latin1')  
+
+    # Split data into input and lable output
+    X_entropy = dataset_entroy.iloc[:, [0,1,2,3, 4]].values
+    y_entropy = dataset_entroy.iloc[:, 5].values
+
+    # Split dataset train, dataset test
+    from sklearn.cross_validation import train_test_split
+    X_train_entropy, X_test_entropy, y_train_entropy, y_test_entropy = train_test_split(X_entropy, y_entropy, test_size = 0.25,
+     random_state = 0)
+
+    # Fit_transform data
+    from sklearn.preprocessing import StandardScaler
+    sc = StandardScaler()
+    X_train_entropy = sc.fit_transform(X_train_entropy)
+    X_test_entropy = sc.transform(X_test_entropy)
+
+    #Build model decision tree 
+    from sklearn.tree import DecisionTreeClassifier
+    classifier_entropy = DecisionTreeClassifier(criterion = 'entropy', random_state = 0)
+    classifier_entropy.fit(X_train_entropy, y_train_entropy)
+
+    y_pred_entropy = classifier_entropy.predict(X_test_entropy)
+
+    # confussion matrix
+    from sklearn.metrics import confusion_matrix
+    cm_entropy = confusion_matrix(y_test_entropy, y_pred_entropy) 
+    cm_entropy = cm_entropy.tolist();
+
+    # accuracy_score
+    from sklearn.metrics import accuracy_score
+    accurate_entropy =  accuracy_score(y_test_entropy, y_pred_entropy)
+
+    return render_template("classification.html", accurate_entropy =accurate_entropy,
+                            cm_entropy = cm_entropy, cm_gini=cm_gini)
+
+# Gini
+@app.route('/gini', methods = ['POST'])
+def gini():
+    global accurate_entropy
+    global  cm_entropy;
+
+    dataset_gini = pd.read_csv("./dataset/2017_preprocessed 13_12_2018 23_11_37.csv", encoding ='latin1')  
+     # Split data into input and lable output
+    X_gini = dataset_gini.iloc[:, [0,1,2,3, 4]].values
+    y_gini = dataset_gini.iloc[:, 5].values
+
+    # Split dataset train, dataset test
+    from sklearn.cross_validation import train_test_split
+    X_train_gini, X_test_gini, y_train_gini, y_test_gini = train_test_split(X_gini, y_gini, test_size = 0.25, random_state = 0)
+
+    # Fit_transform data
+    from sklearn.preprocessing import StandardScaler
+    sc = StandardScaler()
+    X_train_gini = sc.fit_transform(X_train_gini)
+    X_test_gini = sc.transform(X_test_gini)
+
+    #Build model decision tree 
+    from sklearn.tree import DecisionTreeClassifier
+    classifier_gini = DecisionTreeClassifier(criterion = 'gini', random_state = 0)
+    classifier_gini.fit(X_train_gini, y_train_gini)
+
+    y_pred_gini = classifier_gini.predict(X_test_gini)
+
+    # confussion matrix
+    from sklearn.metrics import confusion_matrix
+    cm_gini = confusion_matrix(y_test_gini, y_pred_gini)
+    cm_gini = cm_gini.tolist()
+
+    # accuracy_score
+    from sklearn.metrics import accuracy_score
+    accurate_gini =  accuracy_score(y_test_gini, y_pred_gini)
+
+    return render_template("classification.html", accurate_gini =accurate_gini, 
+                            accurate_entropy=accurate_entropy,  cm_entropy = cm_entropy,cm_gini =cm_gini)
+
+
+
 
 if __name__ == "__main__":
     app.run(host='localhost', port=8080, debug=True)

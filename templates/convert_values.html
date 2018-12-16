@@ -1,0 +1,76 @@
+
+{% extends "layout.html" %}
+{% block title %}Home {% endblock %}
+{% block head %}
+  {{ super() }} 
+
+	<script>
+	function myFunction() { 
+	    document.getElementById("Button").click();
+	}
+
+	</script>
+
+
+  <style type="text/css">
+  	h1{
+  		color: red;
+  		text-align: center;
+  	}
+
+  	.colums_road_class{
+  		position: static;
+  		margin-bottom: 10px;
+  		margin-top: 20px;
+  	}
+
+  	.colums_road_surface{ 
+  		position:initial;
+  	}
+
+  	input{
+  		background-color: #008CBA;
+  		border-radius: 25px;
+  		color : #ffffff;
+  		width: 150px;
+  	}
+
+  	li.li{
+  		 font-weight: bold;
+  		 margin-top: 20px;
+  	}  
+
+  	.clicker {
+  		background-color: #008CBA;
+  		border-radius: 25px;
+  		color : #ffffff;
+  		width: 100px;
+  	}
+  </style>
+{% endblock %}
+ 
+{% block content  %}
+<h1 >CONVERT VALUES</h1> 
+
+
+ <!-- Dữ liệu gốc -->
+<li class="li">Original datase</li>
+<div style="overflow: auto;
+    white-space: nowrap;"> 
+     {{data.to_html(border=1, na_rep="-") | safe}}
+</div> 
+ 
+<!-- Chuyển đổi dữ liệu file -->
+<li class="li">Convert Values</li>  
+			 <p>Chuyển đổi dịnh dạng dữ liệu:</p>
+			 <form action="{{url_for('converted_values')}}", method="POST" class="clicker"  id="nameform">
+			<!-- 	<input type="submit" value="Convert data" 
+				 /> -->
+			</form> 
+<button type="submit" form="nameform" value="Submit" class="clicker">Convert</button>
+
+
+{{  value }}
+ 
+
+{% endblock %}
