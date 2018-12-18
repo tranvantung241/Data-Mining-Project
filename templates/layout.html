@@ -27,6 +27,17 @@
 
    <!-- <link rel='shortcut icon' type='image/x-icon' href='/static/image/Favicon.ico' /> -->
 
+   <!-- RELOAD PAGE -->
+   <script> 
+     function confirmRefresh() {
+        var okToRefresh = confirm("Do you really want to refresh the page?");
+        if (okToRefresh)
+          {
+              setTimeout("location.reload(true);",1500);
+          }
+        }
+    </script>
+
     <title>{% block title %}{% endblock %}  - Data Mining </title> 
 
      {% endblock %}
@@ -89,9 +100,9 @@
             <span>Classification</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i  ></i>
-            <span> </span></a>
+          <a class="nav-link" href="javascript:confirmRefresh();">
+            <i></i>
+            <span>Reload </span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">

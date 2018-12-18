@@ -12,7 +12,7 @@
     }
 
     table, th, td {
-        border: 1px solid black;
+        /*border: 1px solid black;*/
         padding-bottom: 5px;
     }
 
@@ -26,10 +26,32 @@
         padding-top: 20px
     }
 
+    li.select{ 
+        padding-bottom: 5px;
+        padding-top: 10px
+    } 
     select{
         padding-left: 10px;
         padding-right: 10px;
+        width: 400px;
+        border-radius: 10px; 
+        background-color: #81F79F;
     }
+
+    .div_titte_selection
+    {
+        width: 400px;
+        font-weight: bold;
+         text-decoration: underline;
+    }
+
+    input{
+        background-color: #008CBA;
+        border-radius: 25px;
+        color : #ffffff;
+        width: 100px;
+    }
+
   </style>
 {% endblock %}
  
@@ -64,35 +86,93 @@
                 <p>Confusion Matrix:  </p>
             <div style="border: 1px solid black; width: 100px">
                 <p>{{cm_gini[0]}} <br> {{cm_gini[1]}} <br> {{cm_gini[2]}} </p> 
-            </div>
-
+            </div> 
         </th>  
+
+        <th>
+             <!-- dùng thuật toán Gini -->
+            <h5>Thuật toán Bayes</h2> 
+            <form action="{{url_for('bayes')}}", method="POST" class="clicker"  id="bayesform"> </form> 
+            <button type="submit" form="bayesform" value="Submit" class="clicker">Bayes</button>
+            <p>Độ chính xác : {{accurate_bayes}}</p>
+                <p>Confusion Matrix:  </p>
+            <div style="border: 1px solid black; width: 100px">
+                <p>{{cm_bayes[0]}} <br> {{cm_bayes[1]}} <br> {{cm_bayes[2]}} </p> 
+            </div> 
+        </th>  
+
+
       </tr>
     </table>
     
     <!-- Phân lớp -->
-    <li class="li">Phân lớp</li> 
+    <div></div>
+    <table class="classificate"> 
+        <tr>
+            <!-- phân lớp -->
+            <th>
+                 <li class="li">Phân lớp</li> 
 
-    <form action="/action_page.php">
-        <p>Cột 1:  Cột 2:</p> 
-      <select name="cars">
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="fiat">Fiat</option>
-        <option value="audi">Audi</option>
-      </select>
+                <form action="{{url_for('classified')}}", method="POST">
+                    <ul>
 
-      <select name="cars">
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="fiat">Fiat</option>
-        <option value="audi">Audi</option>
-      </select>
+                        <li class="select"> <div   class="div_titte_selection">  1st Road Class & No:</div> 
+                            <select name="cot1" style="width: 400px;">
+                            {% for key, value in dict_Road_Class_2.items() %}
+                                  <option value="{{ value }}">{{ key }}</option> 
+                            {% endfor %}
+                            </select>  
+                        </li>
+                    
+                        <li class="select" > <div  class="div_titte_selection">Road Surface: </div> 
+                            <select name="cot2">
+                            {% for key, value in dict_Road_Surface_2.items() %}
+                                  <option value="{{ value }}">{{ key }}</option> 
+                            {% endfor %}
+                            </select>  
+                        </li>
+                    
+                        <li class="select"> <div   class="div_titte_selection">Lighting Conditions:</div>  
+                            <select name="cot3">
+                            {% for key, value in dict_Lighting_2.items() %}
+                                  <option value="{{ value }}">{{ key }}</option> 
+                            {% endfor %}
+                            </select>  
+                        </li>
 
+                        <li class="select"><div   class="div_titte_selection">Weather Conditions: </div>  
+                            <select name="cot4">
+                            {% for key, value in dict_Weather_2.items() %}
+                                  <option value="{{ value }}">{{ key }}</option> 
+                            {% endfor %}
+                            </select>  
+                        </li>
 
-         <br><br>
-      <input type="submit">
-    </form>
+                        <li class="select"><div  class="div_titte_selection">Type of Vehicle: </div>  
+                            <select name="cot5">
+                            {% for key, value in dict_Vehicle_2.items() %}
+                                  <option value="{{ value }}">{{ key }}</option> 
+                            {% endfor %}
+                            </select>  
+                        </li>
+             
+                  </ul> 
+                  <input style="margin-left: 90px;" type="submit"  name="action" value="Entropy"> 
+                  <input type="submit"  name="action" value="Gini">
+                  <input type="submit"  name="action" value="Bayes">
+                </form>
+            </th>
+
+            <!-- kết quả -->
+            <th style="padding-left: 30px;">
+                <li class="li">Kết quả:</li>  
+                <h2>{{name}}</h2>
+                <h2>{{x_test_list}}</h2>
+                <h2 style="color:red;">{{y_pred}}</h2>
+            </th>
+        </tr>
+    </table>
+   
 </div>
             
 {% endblock %}
